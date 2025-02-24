@@ -6,17 +6,18 @@ import {
   createContact,
   updateContact,
 } from "../controllers/contactsControllers.js";
+import ctrlWrap from "../utils/ctrlWrap.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", getAllContacts);
+contactsRouter.get("/", ctrlWrap(getAllContacts));
 
-contactsRouter.get("/:id", getOneContact);
+contactsRouter.get("/:id", ctrlWrap(getOneContact));
 
-contactsRouter.delete("/:id", deleteContact);
+contactsRouter.delete("/:id", ctrlWrap(deleteContact));
 
-contactsRouter.post("/", createContact);
+contactsRouter.post("/", ctrlWrap(createContact));
 
-contactsRouter.put("/:id", updateContact);
+contactsRouter.put("/:id", ctrlWrap(updateContact));
 
 export default contactsRouter;
