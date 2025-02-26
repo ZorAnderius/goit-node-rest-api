@@ -2,9 +2,7 @@ import { v4 as uuid4 } from "uuid";
 import * as path from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 
-const contactsPath = process.cwd().includes("src")
-  ? path.resolve("db", "contacts.json")
-  : path.resolve("src", "db", "contacts.json");
+const contactsPath = path.resolve("src", "db", "contacts.json");
 
 const updateContacts = async (contact) => {
   await writeFile(contactsPath, JSON.stringify(contact, null, 2), "utf-8");
