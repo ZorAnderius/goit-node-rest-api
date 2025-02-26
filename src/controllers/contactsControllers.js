@@ -1,4 +1,5 @@
 import HttpError from "../helpers/HttpError.js";
+import isEmptyObject from "../helpers/isEmptyObject.js";
 import * as contactsService from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
@@ -25,7 +26,7 @@ export const deleteContact = async (req, res) => {
   const { id } = req.params;
   const contact = await contactsService.removeContact(id);
   if (!contact) throw HttpError(404, "Not found");
-  res.json({
+  res.status(200).json({
     status: 200,
     message: `Contact with ${id} delete successfully`,
     data: contact,
@@ -41,4 +42,15 @@ export const createContact = async (req, res) => {
   });
 };
 
-export const updateContact = (req, res) => {};
+export const updateContact = async (req, res) => {
+  if (isEmptyObject(req.body))
+    throw HttpError(400, "Body must have at least one field");
+  const { id } = req.params;
+  const contact = await contactsService.updateContact(id, req.body);
+  if (!contact) throw HttpError(404, "Not found");
+  res.status(200).json({
+    status: 200,
+    message: `Contact with ${id} was successfully updated`,
+    data: contact,
+  });
+};
