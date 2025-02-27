@@ -1,7 +1,7 @@
 import { v4 as uuid4 } from "uuid";
 import * as path from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
-import sequelize from "../db/sequelize.js";
+import Contact from "../db/models/Contact.js";
 
 const contactsPath = path.resolve("src", "db", "contacts.json");
 

@@ -6,9 +6,8 @@ export const createContactSchema = Joi.object({
     .trim()
     .email({ tlds: { allow: false } })
     .required(),
-  phone: Joi.string()
-    .trim()
-    .required(),
+  phone: Joi.string().trim().required(),
+  favorite: Joi.boolean().default(false),
 });
 
 export const updateContactSchema = Joi.object({
@@ -16,6 +15,6 @@ export const updateContactSchema = Joi.object({
   email: Joi.string()
     .trim()
     .email({ tlds: { allow: false } }),
-  phone: Joi.string()
-    .trim(),
+  phone: Joi.string().trim(),
+  favorite: Joi.boolean(),
 });
