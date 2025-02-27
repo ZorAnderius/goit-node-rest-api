@@ -5,10 +5,10 @@ const isValidID =
   (idName = "id") =>
   (req, _, next) => {
     const id = req.params[idName];
-    const isCustomID = /^[a-zA-Z0-9\-_]{10,30}$/.test(id);
+    const isNumber = /^\d+$/.test(id);
     const isUuidID = validate(id);
 
-    if (isCustomID || isUuidID) return next();
+    if (isNumber || isUuidID) return next();
 
     return next(HttpError(400, "Invalid ID"));
   };
