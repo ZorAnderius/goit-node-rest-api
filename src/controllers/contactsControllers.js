@@ -1,5 +1,4 @@
 import HttpError from "../helpers/HttpError.js";
-import isEmptyObject from "../helpers/isEmptyObject.js";
 import * as services from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
@@ -43,8 +42,6 @@ export const createContact = async (req, res) => {
 };
 
 export const updateContact = async (req, res) => {
-  if (isEmptyObject(req.body))
-    throw HttpError(400, "Body must have at least one field");
   const { id } = req.params;
   const contact = await services.updateContact(id, req.body);
   if (!contact) throw HttpError(404, "Not found");
@@ -56,8 +53,6 @@ export const updateContact = async (req, res) => {
 };
 
 export const updateStatusContact = async (req, res) => {
-  if (isEmptyObject(req.body))
-    throw HttpError(400, "Body must have at least one field");
   const { id } = req.params;
   const contact = await services.updateContact(id, req.body);
   if (!contact) throw HttpError(404, "Not found");
