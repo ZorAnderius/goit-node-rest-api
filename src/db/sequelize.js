@@ -1,14 +1,14 @@
 import { Sequelize } from "sequelize";
 import env from "../utils/env.js";
-import variablesDB from "../utils/constants/variablesDB.js";
+import envVariables from "../constants/envVariables.js";
 
 const sequelize = new Sequelize({
-  dialect: env(variablesDB.POSTGRES.DB_DIALECT),
-  username: env(variablesDB.POSTGRES.DB_USERNAME),
-  password: env(variablesDB.POSTGRES.DB_PASSWORD),
-  host: env(variablesDB.POSTGRES.DB_HOST),
-  database: env(variablesDB.POSTGRES.DB_DATABASE),
-  port: env(variablesDB.PORT),
+  dialect: env(envVariables.POSTGRES_DB.DB_DIALECT),
+  username: env(envVariables.POSTGRES_DB.DB_USERNAME),
+  password: env(envVariables.POSTGRES_DB.DB_PASSWORD),
+  host: env(envVariables.POSTGRES_DB.DB_HOST),
+  database: env(envVariables.POSTGRES_DB.DB_DATABASE),
+  port: env(envVariables.POSTGRES_DB.DB_PORT),
   dialectOptions: {
     ssl: true,
   },
