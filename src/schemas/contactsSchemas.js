@@ -18,3 +18,7 @@ export const updateContactSchema = Joi.object({
   phone: Joi.string().trim(),
   favorite: Joi.boolean(),
 });
+
+export const updateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
