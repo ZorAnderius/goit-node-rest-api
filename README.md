@@ -9,7 +9,7 @@ _Result of adding contact in pgAdmin_
 
 
 
-## Results of adding contact to PostgresDB from cloud
+## Results of adding contact to PostgresDB from cloud service
 
 ![Add_contact_with_Postmen](./assets/create_Render.png)
 _Add contact with Postmen_
