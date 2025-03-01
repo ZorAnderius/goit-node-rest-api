@@ -5,6 +5,7 @@ import cors from "cors";
 import contactsRouter from "./routes/contactsRouter.js";
 import env from "./utils/env.js";
 import envVariables from "./constants/envVariables.js";
+import authRouter from "./routes/authRouter.js";
 
 const app = express();
 const PORT = env(envVariables.PORT);
@@ -13,6 +14,7 @@ app.use(morgan("tiny-colored"));
 app.use(cors());
 app.use(express.json());
 
+app.use("api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((_, res) => {
