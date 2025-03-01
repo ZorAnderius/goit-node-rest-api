@@ -3,8 +3,11 @@ import morgan from "./helpers/morganConfig.js";
 import cors from "cors";
 
 import contactsRouter from "./routes/contactsRouter.js";
+import env from "./utils/env.js";
+import envVariables from "./constants/envVariables.js";
 
 const app = express();
+const PORT = env(envVariables.PORT);
 
 app.use(morgan("tiny-colored"));
 app.use(cors());
@@ -21,6 +24,6 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running. Use our API on port: 3000");
+app.listen(PORT, () => {
+  console.log(`Server is running. Use our API on port: ${PORT}`);
 });
