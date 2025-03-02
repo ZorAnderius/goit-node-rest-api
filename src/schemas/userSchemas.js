@@ -10,7 +10,10 @@ export const authRegisterSchema = Joi.object({
   subscription: Joi.string().valid(...subscribeList),
 });
 
-export const authSignInSchema = Joi.object({
-  email: Joi.string().trim().pattern(emailRegexp).required(),
+export const authLoginSchema = Joi.object({
+  email: Joi.string()
+    .trim()
+    .pattern(emailRegexp, "example@example.com")
+    .required(),
   password: Joi.string().min(6).required(),
 });

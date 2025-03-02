@@ -13,3 +13,17 @@ export const authRegisterController = async (req, res) => {
     },
   });
 };
+
+export const authLoginController = async (req, res) => {
+  const result = await service.authLogin(req.body);
+  res.json({
+    status: 200,
+    message: "User successfully log in",
+    data: {
+      user: {
+        email: result.email,
+        subscription: result.subscription,
+      },
+    },
+  });
+};
