@@ -16,8 +16,11 @@ import {
 } from "../schemas/contactsSchemas.js";
 import isEmptyBody from "../helpers/isEmptyBody.js";
 import isValidID from "../helpers/isValidID.js";
+import authenticate from "../middlewares/authenticate.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use("/", authenticate);
 
 contactsRouter.use("/:id", isValidID("id"));
 

@@ -5,12 +5,7 @@ export const authRegisterController = async (req, res) => {
   res.status(201).json({
     status: 201,
     message: "Signup successfully",
-    data: {
-      user: {
-        email: result.email,
-        subscription: result.subscription,
-      },
-    },
+    data: result,
   });
 };
 
@@ -19,11 +14,6 @@ export const authLoginController = async (req, res) => {
   res.json({
     status: 200,
     message: "User successfully log in",
-    data: {
-      user: {
-        email: result.email,
-        subscription: result.subscription,
-      },
-    },
+    data: result,
   });
 };
