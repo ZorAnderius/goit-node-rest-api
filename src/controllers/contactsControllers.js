@@ -2,7 +2,8 @@ import HttpError from "../helpers/HttpError.js";
 import * as services from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
-  const result = await services.listContacts();
+  const { owner_id: owner } = req;
+  const result = await services.listContacts({ owner });
   res.json({
     status: 200,
     message: "Successfully found contacts",
@@ -11,8 +12,9 @@ export const getAllContacts = async (req, res) => {
 };
 
 export const getOneContact = async (req, res) => {
+  const { owner_id: owner } = req;
   const { id } = req.params;
-  const contact = await services.getContactById(id);
+  const contact = await services.getContactById({ id, owner });
   if (!contact) throw HttpError(404, "Not found");
   res.json({
     status: 200,
@@ -22,8 +24,9 @@ export const getOneContact = async (req, res) => {
 };
 
 export const deleteContact = async (req, res) => {
+  const { owner_id: owner } = req;
   const { id } = req.params;
-  const contact = await services.removeContact(id);
+  const contact = await services.removeContact({ id, owner });
   if (!contact) throw HttpError(404, "Not found");
   res.json({
     status: 200,
@@ -33,7 +36,10 @@ export const deleteContact = async (req, res) => {
 };
 
 export const createContact = async (req, res) => {
-  const contact = await services.addContact(req.body);
+  const { owner_id: owner } = req;
+  const updateContact = { ...req.body, owner };
+
+  const contact = await services.addContact(updateContact);
   res.status(201).json({
     status: 201,
     message: "Contact was created successfully",
@@ -42,8 +48,9 @@ export const createContact = async (req, res) => {
 };
 
 export const updateContact = async (req, res) => {
+  const { owner_id: owner } = req;
   const { id } = req.params;
-  const contact = await services.updateContact(id, req.body);
+  const contact = await services.updateContact({ id, owner }, req.body);
   if (!contact) throw HttpError(404, "Not found");
   res.json({
     status: 200,
@@ -53,8 +60,9 @@ export const updateContact = async (req, res) => {
 };
 
 export const updateStatusContact = async (req, res) => {
+  const { owner_id: owner } = req;
   const { id } = req.params;
-  const contact = await services.updateContact(id, req.body);
+  const contact = await services.updateContact({ id, owner }, req.body);
   if (!contact) throw HttpError(404, "Not found");
   res.json({
     status: 200,

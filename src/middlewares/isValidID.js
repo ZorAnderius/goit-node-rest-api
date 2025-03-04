@@ -1,5 +1,5 @@
 import { validate } from "uuid";
-import HttpError from "./HttpError.js";
+import HttpError from "../helpers/HttpError.js";
 
 const isValidID =
   (idName = "id") =>

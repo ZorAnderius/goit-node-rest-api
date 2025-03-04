@@ -32,7 +32,11 @@ export const authLogin = async (data) => {
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
-  const token = createToken(user.email);
+  const token = createToken({ email });
+
+  await user.update(token, {
+    returning: true,
+  });
   return {
     user: {
       email: user.email,

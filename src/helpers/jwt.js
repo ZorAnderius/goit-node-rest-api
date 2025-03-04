@@ -9,7 +9,7 @@ export const createToken = (payload) =>
 
 export const verifyToken = (token) => {
   try {
-    const data = jwt.verify(token);
+    const data = jwt.verify(token, JWT_SECRET);
     return { data };
   } catch (error) {
     return { error };
