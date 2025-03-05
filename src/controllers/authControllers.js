@@ -25,3 +25,15 @@ export const authLogoutController = async (req, res) => {
   if (!result) throw HttpError(401, "Not authorized");
   res.status(204).send();
 };
+
+export const authCurrentUser = (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({
+    status: 200,
+    message: "Successfully found current user",
+    data: {
+      email,
+      subscription,
+    },
+  });
+};

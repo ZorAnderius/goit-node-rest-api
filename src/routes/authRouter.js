@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  authCurrentUser,
   authLoginController,
   authLogoutController,
   authRegisterController,
@@ -25,6 +26,8 @@ authRouter.post(
   validateBody(authLoginSchema),
   ctrlWrap(authLoginController)
 );
+
+authRouter.get("/current", authenticate, ctrlWrap(authCurrentUser));
 
 authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));
 
