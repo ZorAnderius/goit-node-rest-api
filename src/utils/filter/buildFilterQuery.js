@@ -5,7 +5,6 @@ const buildFilterQuery = (filterValues) => {
   if (email) query.email = email;
   if (phone) query.phone = phone;
   if (favorite !== undefined) query.favorite = favorite;
-  console.log(query);
 
   return query;
 };

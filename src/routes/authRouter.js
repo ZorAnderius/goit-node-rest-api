@@ -4,8 +4,13 @@ import {
   authLoginController,
   authLogoutController,
   authRegisterController,
+  userUpdateSubscriptionController,
 } from "../controllers/authControllers.js";
-import { authRegisterSchema, authLoginSchema } from "../schemas/userSchemas.js";
+import {
+  authRegisterSchema,
+  authLoginSchema,
+  userUpdateSubscriptionSchema,
+} from "../schemas/userSchemas.js";
 import ctrlWrap from "../utils/ctrlWrap.js";
 import validateBody from "../middlewares/validateBody.js";
 import isEmptyBody from "../middlewares/isEmptyBody.js";
@@ -28,6 +33,14 @@ authRouter.post(
 );
 
 authRouter.get("/current", authenticate, ctrlWrap(authCurrentUser));
+
+authRouter.patch(
+  "/subscription",
+  authenticate,
+  isEmptyBody,
+  validateBody(userUpdateSubscriptionSchema),
+  ctrlWrap(userUpdateSubscriptionController)
+);
 
 authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));
 

@@ -17,3 +17,9 @@ export const authLoginSchema = Joi.object({
     .required(),
   password: Joi.string().min(6).required(),
 });
+
+export const userUpdateSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscribeList)
+    .required(),
+});

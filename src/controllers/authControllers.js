@@ -37,3 +37,17 @@ export const authCurrentUser = (req, res) => {
     },
   });
 };
+
+export const userUpdateSubscriptionController = async (req, res) => {
+  const { id } = req.user;
+  const result = await service.userUpdateSubscription(id, req.body);
+  if (!result) throw HttpError(401, "Not authorized");
+  res.json({
+    status: 200,
+    message: "Subscription updated successfully",
+    data: {
+      email: result.email,
+      subscription: result.subscription,
+    },
+  });
+};

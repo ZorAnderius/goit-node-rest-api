@@ -46,7 +46,6 @@ export const removeContact = async (query) => {
 
 export const updateContact = async (query, updatesData) => {
   const contact = await getContactById(query);
-  console.log(contact);
   if (!contact) return null;
 
   return contact.update(updatesData, {

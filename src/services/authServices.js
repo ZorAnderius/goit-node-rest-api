@@ -34,9 +34,12 @@ export const authLogin = async (data) => {
   if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
   const token = createToken({ email });
 
-  await user.update({token}, {
-    returning: true,
-  });
+  await user.update(
+    { token },
+    {
+      returning: true,
+    }
+  );
   return {
     user: {
       email: user.email,
@@ -50,6 +53,14 @@ export const authLogout = async (id) => {
   const user = await findUser({ id });
   if (!user) throw HttpError(401, "Not authorized");
   const token = null;
-  await user.update({token});
+  await user.update({ token });
   return true;
+};
+
+export const userUpdateSubscription = async (query, newSubscription) => {
+  const user = await findUser(query);
+  if (!user) throw HttpError(401, "Not authorized");
+  return user.update(newSubscription, {
+    returning: true,
+  });
 };
