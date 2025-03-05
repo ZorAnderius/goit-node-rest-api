@@ -5,19 +5,20 @@ import calculatePaginationValues from "../utils/pagination/calculatePaginationVa
 
 export const listContacts = async ({
   page = defaultPagination.page,
-  perPage = defaultPagination.perPage,
+  limit = defaultPagination.limit,
+  order,
   ...query
 }) => {
-  const limit = perPage;
-  const offset = (page - 1) * perPage;
+  const offset = (page - 1) * limit;
 
   const { count, rows: contacts } = await Contact.findAndCountAll({
     where: query,
     offset,
     limit,
+    order,
   });
 
-  const paginationValue = calculatePaginationValues(count, page, perPage);
+  const paginationValue = calculatePaginationValues(count, page, limit);
 
   console.log(paginationValue.totalPage);
   console.log(page);
