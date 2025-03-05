@@ -1,12 +1,14 @@
 import express from "express";
 import {
   authLoginController,
+  authLogoutController,
   authRegisterController,
 } from "../controllers/authControllers.js";
 import { authRegisterSchema, authLoginSchema } from "../schemas/userSchemas.js";
 import ctrlWrap from "../utils/ctrlWrap.js";
 import validateBody from "../middlewares/validateBody.js";
 import isEmptyBody from "../middlewares/isEmptyBody.js";
+import authenticate from "../middlewares/authenticate.js";
 
 const authRouter = express.Router();
 
@@ -23,5 +25,7 @@ authRouter.post(
   validateBody(authLoginSchema),
   ctrlWrap(authLoginController)
 );
+
+authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));
 
 export default authRouter;

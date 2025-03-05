@@ -1,3 +1,4 @@
+import HttpError from "../helpers/HttpError.js";
 import * as service from "../services/authServices.js";
 
 export const authRegisterController = async (req, res) => {
@@ -16,4 +17,11 @@ export const authLoginController = async (req, res) => {
     message: "User successfully log in",
     data: result,
   });
+};
+
+export const authLogoutController = async (req, res) => {
+  const { id } = req.user;
+  const result = await service.authLogout(id);
+  if (!result) throw HttpError(401, "Not authorized");
+  res.status(204).send();
 };
