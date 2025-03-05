@@ -1,15 +1,18 @@
 import defaultPagination from "../constants/defaultPagination.js";
 import Contact from "../db/models/Contact.js";
 import HttpError from "../helpers/HttpError.js";
+import buildFilterQuery from "../utils/filter/buildFilterQuery.js";
 import calculatePaginationValues from "../utils/pagination/calculatePaginationValues.js";
 
 export const listContacts = async ({
   page = defaultPagination.page,
   limit = defaultPagination.limit,
   order,
-  ...query
+  filter,
+  ...restQuery
 }) => {
   const offset = (page - 1) * limit;
+  const query = { ...restQuery, ...buildFilterQuery(filter) };
 
   const { count, rows: contacts } = await Contact.findAndCountAll({
     where: query,
@@ -19,17 +22,15 @@ export const listContacts = async ({
   });
 
   const paginationValue = calculatePaginationValues(count, page, limit);
-
-  console.log(paginationValue.totalPage);
-  console.log(page);
-  console.log(page > paginationValue.totalPage);
   if (page > paginationValue.totalPage || page < 1)
     throw HttpError(400, "Page is out of range");
 
-  return {
-    contacts,
-    ...paginationValue,
-  };
+  return contacts?.length > 0
+    ? {
+        contacts,
+        ...paginationValue,
+      }
+    : contacts
 };
 
 export const getContactById = (query) => Contact.findOne({ where: query });
