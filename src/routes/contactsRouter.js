@@ -8,16 +8,19 @@ import {
   updateStatusContact,
 } from "../controllers/contactsControllers.js";
 import ctrlWrap from "../utils/ctrlWrap.js";
-import validateBody from "../helpers/validateBody.js";
+import validateBody from "../middlewares/validateBody.js";
 import {
   createContactSchema,
   updateContactSchema,
   updateStatusSchema,
 } from "../schemas/contactsSchemas.js";
-import isEmptyBody from "../helpers/isEmptyBody.js";
-import isValidID from "../helpers/isValidID.js";
+import isEmptyBody from "../middlewares/isEmptyBody.js";
+import isValidID from "../middlewares/isValidID.js";
+import authenticate from "../middlewares/authenticate.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.use("/:id", isValidID("id"));
 
