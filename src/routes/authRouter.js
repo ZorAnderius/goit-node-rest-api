@@ -4,6 +4,7 @@ import {
   authLoginController,
   authLogoutController,
   authRegisterController,
+  userAvatarUpdateController,
   userUpdateSubscriptionController,
 } from "../controllers/authControllers.js";
 import {
@@ -42,6 +43,13 @@ authRouter.patch(
   isEmptyBody,
   validateBody(userUpdateSubscriptionSchema),
   ctrlWrap(userUpdateSubscriptionController)
+);
+
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlWrap(userAvatarUpdateController)
 );
 
 authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));

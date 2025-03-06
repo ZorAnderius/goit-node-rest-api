@@ -72,3 +72,9 @@ export const userUpdateSubscription = async (query, newSubscription) => {
     returning: true,
   });
 };
+
+export const userAvatarUpdate = async (id, avatarURL) => {
+  const user = await findUser({ id });
+  if (!user) return null;
+  return user.update({ avatarURL }, { returning: true });
+};
