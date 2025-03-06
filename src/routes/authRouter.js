@@ -15,11 +15,13 @@ import ctrlWrap from "../utils/ctrlWrap.js";
 import validateBody from "../middlewares/validateBody.js";
 import isEmptyBody from "../middlewares/isEmptyBody.js";
 import authenticate from "../middlewares/authenticate.js";
+import upload from "../middlewares/upload.js";
 
 const authRouter = express.Router();
 
 authRouter.post(
   "/register",
+  upload.single("avatar"),
   isEmptyBody,
   validateBody(authRegisterSchema),
   ctrlWrap(authRegisterController)

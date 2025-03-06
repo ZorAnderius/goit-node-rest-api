@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { createToken } from "../helpers/jwt.js";
+import generateAvatar from "../utils/generateAvatar.js";
 
 export const findUser = (query) =>
   User.findOne({
@@ -16,7 +17,14 @@ export const authRegister = async (data) => {
 
   const hashPassword = await bcrypt.hash(password, 14);
 
-  const newUser = await User.create({ ...data, password: hashPassword });
+  const avatarURL = generateAvatar(email);
+  console.log(avatarURL);
+
+  const newUser = await User.create({
+    ...data,
+    avatarURL,
+    password: hashPassword,
+  });
   return {
     user: {
       email: newUser.email,
