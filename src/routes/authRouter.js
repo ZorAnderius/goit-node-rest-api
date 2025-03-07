@@ -4,6 +4,7 @@ import {
   authLoginController,
   authLogoutController,
   authRegisterController,
+  userAvatarUpdateController,
   userUpdateSubscriptionController,
 } from "../controllers/authControllers.js";
 import {
@@ -15,11 +16,13 @@ import ctrlWrap from "../utils/ctrlWrap.js";
 import validateBody from "../middlewares/validateBody.js";
 import isEmptyBody from "../middlewares/isEmptyBody.js";
 import authenticate from "../middlewares/authenticate.js";
+import upload from "../middlewares/upload.js";
 
 const authRouter = express.Router();
 
 authRouter.post(
   "/register",
+  upload.single("avatar"),
   isEmptyBody,
   validateBody(authRegisterSchema),
   ctrlWrap(authRegisterController)
@@ -40,6 +43,13 @@ authRouter.patch(
   isEmptyBody,
   validateBody(userUpdateSubscriptionSchema),
   ctrlWrap(userUpdateSubscriptionController)
+);
+
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlWrap(userAvatarUpdateController)
 );
 
 authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { createToken } from "../helpers/jwt.js";
+import generateAvatar from "../utils/generateAvatar.js";
 
 export const findUser = (query) =>
   User.findOne({
@@ -16,7 +17,14 @@ export const authRegister = async (data) => {
 
   const hashPassword = await bcrypt.hash(password, 14);
 
-  const newUser = await User.create({ ...data, password: hashPassword });
+  const avatarURL = generateAvatar(email);
+  console.log(avatarURL);
+
+  const newUser = await User.create({
+    ...data,
+    avatarURL,
+    password: hashPassword,
+  });
   return {
     user: {
       email: newUser.email,
@@ -51,7 +59,7 @@ export const authLogin = async (data) => {
 
 export const authLogout = async (id) => {
   const user = await findUser({ id });
-  if (!user) throw HttpError(401, "Not authorized");
+  if (!user) return null;
   const token = null;
   await user.update({ token });
   return true;
@@ -59,8 +67,14 @@ export const authLogout = async (id) => {
 
 export const userUpdateSubscription = async (query, newSubscription) => {
   const user = await findUser(query);
-  if (!user) throw HttpError(401, "Not authorized");
+  if (!user) return null;
   return user.update(newSubscription, {
     returning: true,
   });
+};
+
+export const userAvatarUpdate = async (id, avatarURL) => {
+  const user = await findUser({ id });
+  if (!user) return null;
+  return user.update({ avatarURL }, { returning: true });
 };
