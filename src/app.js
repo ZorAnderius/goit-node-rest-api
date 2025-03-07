@@ -3,12 +3,9 @@ import morgan from "./helpers/morganConfig.js";
 import cors from "cors";
 
 import contactsRouter from "./routes/contactsRouter.js";
-import env from "./utils/env.js";
-import envVariables from "./constants/envVariables.js";
 import authRouter from "./routes/authRouter.js";
 
 const app = express();
-const PORT = env(envVariables.PORT);
 
 app.use(morgan("tiny-colored"));
 app.use(cors());
