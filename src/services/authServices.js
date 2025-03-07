@@ -59,7 +59,7 @@ export const authLogin = async (data) => {
 
 export const authLogout = async (id) => {
   const user = await findUser({ id });
-  if (!user) throw HttpError(401, "Not authorized");
+  if (!user) return null;
   const token = null;
   await user.update({ token });
   return true;
@@ -67,7 +67,7 @@ export const authLogout = async (id) => {
 
 export const userUpdateSubscription = async (query, newSubscription) => {
   const user = await findUser(query);
-  if (!user) throw HttpError(401, "Not authorized");
+  if (!user) return null;
   return user.update(newSubscription, {
     returning: true,
   });

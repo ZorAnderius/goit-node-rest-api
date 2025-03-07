@@ -3,16 +3,22 @@
   "version": "1.0.0",
   "description": "Написати REST API для роботи з колекцією контактів. Для роботи з REST API використовуй [Postman] (https://www.getpostman.com/).",
   "type": "module",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --coverage",
+    "test:file": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest functions",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
