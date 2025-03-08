@@ -58,15 +58,23 @@ export const userUpdateSubscriptionController = async (req, res) => {
 
 export const userAvatarUpdateController = async (req, res) => {
   if (!req.file) throw HttpError(400, "Image is missing");
-  
+
   const { id } = req.user;
   const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarPath, filename);
-  await fs.rename(oldPath, newPath);
+  try {
+    await fs.rename(oldPath, newPath);
+  } catch (error) {
+    await fs.unlink(oldPath);
+    throw HttpError(500, "Failed to move the file");
+  }
 
   const avatarUrl = path.join("avatars", filename);
   const result = await service.userAvatarUpdate(id, avatarUrl);
-  if (!result) throw HttpError(401, "Not authorized");
+  if (!result) {
+    await fs.unlink(newPath);
+    throw HttpError(401, "Not authorized");
+  }
   res.json({
     status: 200,
     message: "User avatar was successfully updated",
