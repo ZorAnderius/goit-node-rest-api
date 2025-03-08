@@ -59,8 +59,14 @@ export const userUpdateSubscriptionController = async (req, res) => {
 export const userAvatarUpdateController = async (req, res) => {
   if (!req.file) throw HttpError(400, "Image is missing");
 
-  const { id } = req.user;
   const { path: oldPath, filename } = req.file;
+
+  if (!req.file?.mimetype?.includes("image")) {
+    await fs.unlink(oldPath);
+    throw HttpError(400, "Wrong file type");
+  }
+
+  const { id } = req.user;
   const newPath = path.join(avatarPath, filename);
   try {
     await fs.rename(oldPath, newPath);
@@ -70,6 +76,7 @@ export const userAvatarUpdateController = async (req, res) => {
   }
 
   const avatarUrl = path.join("avatars", filename);
+
   const result = await service.userAvatarUpdate(id, avatarUrl);
   if (!result) {
     await fs.unlink(newPath);
