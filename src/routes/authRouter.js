@@ -52,6 +52,8 @@ authRouter.patch(
   ctrlWrap(userAvatarUpdateController)
 );
 
+authRouter.get("/verify/:verificationToken");
+
 authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));
 
 export default authRouter;
