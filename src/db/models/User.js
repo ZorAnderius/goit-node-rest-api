@@ -29,7 +29,7 @@ const User = sequelize.define("user", {
     defaultValue: false,
   },
   verificationToken: {
-    type: DataType.STRING,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   avatarURL: {
@@ -38,6 +38,6 @@ const User = sequelize.define("user", {
   },
 });
 
-User.sync({alter: true});
+// User.sync({alter: true});
 
 export default User;

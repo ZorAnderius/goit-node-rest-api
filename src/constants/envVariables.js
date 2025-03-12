@@ -1,4 +1,5 @@
 const envVariables = Object.freeze({
+  BASE_URL: "BASE_URL",
   PORT: "PORT",
   JWT_SECRET: "JWT_SECRET",
   MAIL_HOST: "MAIL_HOST",

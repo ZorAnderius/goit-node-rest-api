@@ -1,8 +1,14 @@
 import bcrypt from "bcrypt";
+import { v4 as uuid4 } from "uuid";
+import { createToken } from "../helpers/jwt.js";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
-import { createToken } from "../helpers/jwt.js";
 import generateAvatar from "../utils/generateAvatar.js";
+import sendEmail from "../helpers/sendEmail.js";
+import envVariables from "../constants/envVariables.js";
+import env from "../utils/env.js";
+
+const BASE_URL = env(envVariables.BASE_URL);
 
 export const findUser = (query) =>
   User.findOne({
@@ -18,13 +24,27 @@ export const authRegister = async (data) => {
   const hashPassword = await bcrypt.hash(password, 14);
 
   const avatarURL = generateAvatar(email);
-  console.log(avatarURL);
+  const verificationToken = uuid4();
 
   const newUser = await User.create({
     ...data,
     avatarURL,
     password: hashPassword,
+    verificationToken,
   });
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click for verify email</a>`,
+  };
+
+  try {
+    await sendEmail(verifyEmail);
+  } catch (error) {
+    console.log(error);
+  }
+
   return {
     user: {
       email: newUser.email,
