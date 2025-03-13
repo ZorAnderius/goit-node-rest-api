@@ -6,6 +6,7 @@ import {
   authRegisterController,
   userAvatarUpdateController,
   userUpdateSubscriptionController,
+  verifyEmailController,
 } from "../controllers/authControllers.js";
 import {
   authRegisterSchema,
@@ -52,7 +53,7 @@ authRouter.patch(
   ctrlWrap(userAvatarUpdateController)
 );
 
-authRouter.get("/verify/:verificationToken", );
+authRouter.get("/verify/:verificationToken", ctrlWrap(verifyEmailController));
 
 authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));
 

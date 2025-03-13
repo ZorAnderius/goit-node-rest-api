@@ -22,18 +22,18 @@ export const authRegister = async (data) => {
   const avatarURL = generateAvatar(email);
   const verificationToken = uuid4();
 
+  try {
+    await sendEmail(email, verificationToken);
+  } catch (error) {
+    throw HttpError(500, "Register verify email error");
+  }
+
   const newUser = await User.create({
     ...data,
     avatarURL,
     password: hashPassword,
     verificationToken,
   });
-
-  try {
-    await sendEmail(email, verificationToken);
-  } catch (error) {
-    return HttpError(500, 'Register verify email error')
-  }
 
   return {
     user: {
@@ -47,6 +47,7 @@ export const authLogin = async (data) => {
   const { password, email } = data;
   const user = await findUser({ email });
   if (!user) throw HttpError(401, "Email or password is wrong");
+  if (!user.verify) throw HttpError(401, "Email is not verify");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
@@ -65,6 +66,17 @@ export const authLogin = async (data) => {
     },
     token,
   };
+};
+
+export const verifyEmail = async (verificationToken) => {
+  const user = await findUser({ verificationToken });
+  if (!user) return null;
+  return user.update(
+    { verificationToken: null, verify: true },
+    {
+      returning: true,
+    }
+  );
 };
 
 export const authLogout = async (id) => {
