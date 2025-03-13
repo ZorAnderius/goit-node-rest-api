@@ -5,10 +5,6 @@ import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import generateAvatar from "../utils/generateAvatar.js";
 import sendEmail from "../helpers/sendEmail.js";
-import envVariables from "../constants/envVariables.js";
-import env from "../utils/env.js";
-
-const BASE_URL = env(envVariables.BASE_URL);
 
 export const findUser = (query) =>
   User.findOne({
@@ -33,16 +29,10 @@ export const authRegister = async (data) => {
     verificationToken,
   });
 
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click for verify email</a>`,
-  };
-
   try {
-    await sendEmail(verifyEmail);
+    await sendEmail(email, verificationToken);
   } catch (error) {
-    console.log(error);
+    return HttpError(500, 'Register verify email error')
   }
 
   return {
