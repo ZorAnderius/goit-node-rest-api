@@ -1,8 +1,10 @@
 import bcrypt from "bcrypt";
+import { v4 as uuid4 } from "uuid";
+import { createToken } from "../helpers/jwt.js";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
-import { createToken } from "../helpers/jwt.js";
 import generateAvatar from "../utils/generateAvatar.js";
+import sendEmail from "../helpers/sendEmail.js";
 
 export const findUser = (query) =>
   User.findOne({
@@ -18,13 +20,21 @@ export const authRegister = async (data) => {
   const hashPassword = await bcrypt.hash(password, 14);
 
   const avatarURL = generateAvatar(email);
-  console.log(avatarURL);
+  const verificationToken = uuid4();
+
+  try {
+    await sendEmail(email, verificationToken);
+  } catch (error) {
+    throw HttpError(500, "Register verify email error");
+  }
 
   const newUser = await User.create({
     ...data,
     avatarURL,
     password: hashPassword,
+    verificationToken,
   });
+
   return {
     user: {
       email: newUser.email,
@@ -37,6 +47,7 @@ export const authLogin = async (data) => {
   const { password, email } = data;
   const user = await findUser({ email });
   if (!user) throw HttpError(401, "Email or password is wrong");
+  if (!user.verify) throw HttpError(401, "Email is not verify");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
@@ -55,6 +66,29 @@ export const authLogin = async (data) => {
     },
     token,
   };
+};
+
+export const verifyEmail = async (verificationToken) => {
+  const user = await findUser({ verificationToken });
+  if (!user) return null;
+  return user.update(
+    { verificationToken: null, verify: true },
+    {
+      returning: true,
+    }
+  );
+};
+
+export const resendVerify = async (email) => {
+  const user = await findUser({ email });
+  if (!user) return null;
+  if (user.verify) throw HttpError(404, "Verification has already been passed");
+  try {
+    await sendEmail(email, user.verificationToken);
+  } catch (error) {
+    throw HttpError(500, "Register verify email error");
+  }
+  return true;
 };
 
 export const authLogout = async (id) => {

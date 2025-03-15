@@ -23,6 +23,26 @@ export const authLoginController = async (req, res) => {
   });
 };
 
+export const verifyEmailController = async (req, res) => {
+  const { verificationToken } = req.params;
+  const result = await service.verifyEmail(verificationToken);
+  if (!result) throw HttpError(404, "User not found");
+  res.json({
+    status: 200,
+    message: "Verification successful",
+  });
+};
+
+export const resendVerifyController = async (req, res) => {
+  const { email } = req.body;
+  const result = await service.resendVerify(email);
+  if (!result) throw HttpError(404, "User not found");
+  res.json({
+    status: 200,
+    message: "Verification email sent",
+  });
+};
+
 export const authLogoutController = async (req, res) => {
   const { id } = req.user;
   const result = await service.authLogout(id);

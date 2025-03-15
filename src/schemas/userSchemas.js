@@ -23,3 +23,10 @@ export const userUpdateSubscriptionSchema = Joi.object({
     .valid(...subscribeList)
     .required(),
 });
+
+export const authVerifyEmailSchema = Joi.object({
+  email: Joi.string()
+    .trim()
+    .pattern(emailRegexp, "example@example.com")
+    .required(),
+});

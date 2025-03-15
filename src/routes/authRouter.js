@@ -4,13 +4,16 @@ import {
   authLoginController,
   authLogoutController,
   authRegisterController,
+  resendVerifyController,
   userAvatarUpdateController,
   userUpdateSubscriptionController,
+  verifyEmailController,
 } from "../controllers/authControllers.js";
 import {
   authRegisterSchema,
   authLoginSchema,
   userUpdateSubscriptionSchema,
+  authVerifyEmailSchema,
 } from "../schemas/userSchemas.js";
 import ctrlWrap from "../utils/ctrlWrap.js";
 import validateBody from "../middlewares/validateBody.js";
@@ -51,6 +54,14 @@ authRouter.patch(
   upload.single("avatar"),
   ctrlWrap(userAvatarUpdateController)
 );
+
+authRouter.post(
+  "/verify",
+  isEmptyBody,
+  validateBody(authVerifyEmailSchema),
+  ctrlWrap(resendVerifyController)
+);
+authRouter.get("/verify/:verificationToken", ctrlWrap(verifyEmailController));
 
 authRouter.post("/logout", authenticate, ctrlWrap(authLogoutController));
 
