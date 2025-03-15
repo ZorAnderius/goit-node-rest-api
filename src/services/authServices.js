@@ -79,6 +79,18 @@ export const verifyEmail = async (verificationToken) => {
   );
 };
 
+export const resendVerify = async (email) => {
+  const user = await findUser({ email });
+  if (!user) return null;
+  if (user.verify) throw HttpError(404, "Verification has already been passed");
+  try {
+    await sendEmail(email, user.verificationToken);
+  } catch (error) {
+    throw HttpError(500, "Register verify email error");
+  }
+  return true;
+};
+
 export const authLogout = async (id) => {
   const user = await findUser({ id });
   if (!user) return null;
